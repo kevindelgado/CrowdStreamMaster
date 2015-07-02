@@ -40,7 +40,8 @@ import org.opencv.imgproc.Imgproc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.example.android_seep_master.MainActivity;
+//import com.example.android_seep_master.MainActivity;
+import com.example.android_seep_master.FaceService;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -89,7 +90,7 @@ public class Source implements StatelessOperator  {
 		@Override
 		public void run(){
 
-			while(MainActivity.isSystemRunning){	
+			while(FaceService.isSystemRunning){	
 				bitmap = bitmaps[0]; //getFrameV2(i);	
 
 
@@ -104,7 +105,9 @@ public class Source implements StatelessOperator  {
 						0,
 						0,
 						0, 
-						0);
+						0,
+						0
+						);
 				try {
 					api.send(output);
 				} catch (ValuedException e1) {
@@ -141,7 +144,7 @@ public class Source implements StatelessOperator  {
 ////					}
 //				} else {
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(30);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

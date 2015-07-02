@@ -36,10 +36,14 @@ public class StatelessRoutingImpl implements RoutingStrategyI, Serializable{
 	private int remainingWindow = 0;
 	private int numberOfDownstreams = 0;
 
-	static final int ROUTING_SCHEME = 0; //0 for round-robin, 1 for load balancing, 2 for minimal ,3 for minimal delay
-	
-	static final int LAMDA = 40;//ideal arrival rate
-	static int updateCount = 0;
+	/* 0 for round-robin, 
+	   1 for round-robin-throughput, 
+	   2 for round-robin-latency, 
+	   3 for partial-round-robin-throughput, 
+	   4 for partial-round-robin-latency
+	*/
+	static final int ROUTING_SCHEME = 1; 
+
 	//This structure maps the real indexes (where is a given downstream) with the virtual index (where is a downstream within the set of downstream of same type
 	// so map virtual integer with real integer
 	/// \todo{consider change this structure to arraylist}
@@ -176,18 +180,13 @@ public class StatelessRoutingImpl implements RoutingStrategyI, Serializable{
 	}
 
 	@Override
-	public void updateScoreMap(int index, int score){
-		rs.updateScoreMap(index, score);		
+	public void updateProcessingDelays(int index, int processingDelay){
+		rs.updateProcessingDelays(index, processingDelay);		
 	}
 
 	@Override
 	public void reduceDownstreamSize(){
 		numberOfDownstreams--;//TODO: Or avoid certain index 
-	}
-
-	@Override
-	public void updateDelays(int index, double processDelay) {
-		rs.updateDelayMaps(index, processDelay);		
 	}
 
 }

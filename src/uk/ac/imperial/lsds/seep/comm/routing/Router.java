@@ -329,20 +329,11 @@ public class Router implements Serializable{
 		return customHash(v);
 	}
 
-	public void updateRoutingImpl(OperatorContext opContext, int opId, int score){
+	public void updateRoutingImpl(OperatorContext opContext, int opId, int processingDelay){
 		Set<Integer> impls = downstreamRoutingImpl.keySet();
 		Iterator<Integer> it = impls.iterator();
 		int index = opContext.getDownOpIndexFromOpId(opId);
-		downstreamRoutingImpl.get(it.next()).updateScoreMap(index, score);
-//		LOG.info("Updating routing impl with score {}", score);
-
-	}
-	
-	public void updateRoutingImpl(OperatorContext opContext, int opId,  double processDelay){
-		Set<Integer> impls = downstreamRoutingImpl.keySet();
-		Iterator<Integer> it = impls.iterator();
-		int index = opContext.getDownOpIndexFromOpId(opId);
-		downstreamRoutingImpl.get(it.next()).updateDelays(index, processDelay);
+		downstreamRoutingImpl.get(it.next()).updateProcessingDelays(index, processingDelay);
 //		LOG.info("Updating routing impl with score {}", score);
 
 	}

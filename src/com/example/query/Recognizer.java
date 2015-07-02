@@ -32,7 +32,7 @@ import uk.ac.imperial.lsds.seep.exception.ValuedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.example.android_seep_master.MainActivity;
+import com.example.android_seep_master.FaceService;
 
 public class Recognizer implements StatelessOperator{
 
@@ -76,8 +76,8 @@ public class Recognizer implements StatelessOperator{
 			mBitmap = Bitmap.createBitmap(m.width(),m.height(), Bitmap.Config.ARGB_8888);
 			Utils.matToBitmap(m, mBitmap);	
 
-			if (MainActivity.fr.canPredict()){
-				name=MainActivity.fr.predict(m);
+			if (FaceService.fr.canPredict()){
+				name=FaceService.fr.predict(m);
 			}	
 
 			DataTuple output = data.setValues(index,null,0,0,0,name,timeStamp,x,y,width,height);

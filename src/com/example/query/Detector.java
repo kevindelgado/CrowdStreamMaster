@@ -40,7 +40,7 @@ import org.opencv.imgproc.Imgproc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.example.android_seep_master.MainActivity;
+import com.example.android_seep_master.FaceService;
 
 import android.graphics.Bitmap;
 import android.graphics.RectF;
@@ -101,8 +101,8 @@ public class Detector implements StatelessOperator  {
 
 			MatOfRect faces = new MatOfRect();
 
-			if (MainActivity.mJavaDetector != null)
-				MainActivity.mJavaDetector.detectMultiScale(mGray, faces, 1.1, 2, 2, // TODO: objdetect.CV_HAAR_SCALE_IMAGE
+			if (FaceService.mJavaDetector != null)
+				FaceService.mJavaDetector.detectMultiScale(mGray, faces, 1.1, 2, 2, // TODO: objdetect.CV_HAAR_SCALE_IMAGE
 						new Size(mAbsoluteFaceSize, mAbsoluteFaceSize), new Size());
 
 

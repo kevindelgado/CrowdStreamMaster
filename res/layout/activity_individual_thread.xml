@@ -1,0 +1,140 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context="com.example.android_seep_master.MainActivity"
+    tools:ignore="MergeRootFrame" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="0.88"
+        android:gravity="left"
+        android:orientation="vertical"
+        android:layout_marginTop="0dp"
+        android:padding="0dp" 
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.88"
+            android:id="@+id/firstLayout"
+            >
+
+            <ImageView
+                android:id="@+id/imageView"
+           		android:layout_width="match_parent"                
+           		android:layout_height='match_parent'
+                />
+
+            <ImageView
+                android:id="@+id/outside_imageview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignLeft="@id/imageView"
+                android:layout_alignTop="@id/imageView"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY" />
+            
+            <TextView
+                android:id="@+id/textWelcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\n Ad hoc video face recognition demo\n running on EdgeStream mobile stream\n distribution and processing platform \n\n by IBM Research \n "
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="30sp" 
+                android:scaleType="fitXY"
+                android:background="@android:color/background_dark"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true" />
+                 
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal" 
+             >
+
+            <TextView
+                android:id="@+id/textResult"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="32sp" 
+                android:layout_weight="1"/>
+            
+            <TextView
+                android:id="@+id/textResult2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="32sp"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingTop="10dip"
+        android:orientation="vertical" >
+        
+        <!--  
+		<Button
+		    android:id="@+id/button_port"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="Port" />
+		    -->
+		
+        <Button
+            android:id="@+id/button_fps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FPS" />
+        
+        <ToggleButton
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="Local"
+            android:textOn="Local" />
+
+        <ToggleButton
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="Remote"
+            android:textOn="Remote" />
+
+        <ToggleButton
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="Deploy"
+            android:textOn="Deploy" />
+
+        <ToggleButton
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="Start"
+            android:textOn="Start" />
+        
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stop" />
+        
+ 
+    </LinearLayout>
+
+</LinearLayout>

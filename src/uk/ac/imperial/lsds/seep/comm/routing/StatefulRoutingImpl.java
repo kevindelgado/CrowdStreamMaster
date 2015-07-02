@@ -228,17 +228,11 @@ public class StatefulRoutingImpl implements RoutingStrategyI, Serializable{
 	}
 	
 	@Override
-	public void updateScoreMap(int index, int score){
+	public void updateProcessingDelays(int index, int score){
 	}
 
 	@Override
 	public void reduceDownstreamSize() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void updateDelays(int index, double processDelay) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="10dip"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    >
+    
+    <EditText android:id="@+id/port1"
+        android:inputType="number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Port 1 (2001)" />
+    
+    <EditText android:id="@+id/port2"
+        android:inputType="number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Port 2 (40000)" />
+    
+    <EditText android:id="@+id/port3"
+        android:inputType="number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Port 3 (50000)" />
+    
+    <EditText android:id="@+id/num_workers"
+        android:inputType="number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Number of workers (e.g. 2)" />
+    
+    <Button android:id="@+id/start_process"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start"
+        android:onClick="startProcess" />
+    
+    <Button android:id="@+id/cancel_process"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:onClick="cancelProcess" />
+    
+    
+    
+</LinearLayout>

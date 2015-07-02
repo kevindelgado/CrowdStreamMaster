@@ -17,7 +17,7 @@ import java.net.UnknownHostException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.example.android_seep_master.MainActivity;
+import com.example.android_seep_master.FaceService;
 
 import uk.ac.imperial.lsds.seep.api.QueryPlan;
 import uk.ac.imperial.lsds.seep.elastic.NodePoolEmptyException;

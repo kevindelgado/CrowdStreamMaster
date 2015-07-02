@@ -20,7 +20,7 @@ import uk.ac.imperial.lsds.seep.operator.Connectable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.example.android_seep_master.MainActivity;
+import com.example.android_seep_master.FaceService;
 public class Base implements QueryComposer{
 	Logger LOG = LoggerFactory.getLogger(Base.class);
 
@@ -50,6 +50,8 @@ public class Base implements QueryComposer{
 		srcFields.add("value9");
 		srcFields.add("value10");
 		srcFields.add("value11");
+		srcFields.add("value12");
+
 		Connectable src = QueryBuilder.newStatelessSource(new Source(), 0, srcFields);
 
 		// Declare processor1
@@ -66,6 +68,8 @@ public class Base implements QueryComposer{
 		pFields.add("value9");
 		pFields.add("value10");
 		pFields.add("value11");
+		pFields.add("value12");
+
 		//Connectable detector = QueryBuilder.newStatelessOperator(new Detector(), 1, pFields);
 		//Connectable detector2 = QueryBuilder.newStatelessOperator(new Detector(), -1, pFields);
 
@@ -79,7 +83,7 @@ public class Base implements QueryComposer{
 //			recognizers.add(QueryBuilder.newStatelessOperator(new Recognizer(), (i+1)*2, pFields));
 //		}
 		
-		for (int i = 0; i < MainActivity.numOps; i++){
+		for (int i = 0; i < FaceService.numOps; i++){
 //			detectors.add(QueryBuilder.newStatelessOperator(new Detector(), i*2+1, pFields));
 //			recognizers.add(QueryBuilder.newStatelessOperator(new Recognizer(), (i+1)*2, pFields));
 			processors.add(QueryBuilder.newStatelessOperator(new ProcessorUnited(), i+1, pFields));
@@ -99,6 +103,8 @@ public class Base implements QueryComposer{
 		snkFields.add("value9");
 		snkFields.add("value10");
 		snkFields.add("value11");
+		snkFields.add("value12");
+
 		Connectable snk = QueryBuilder.newStatelessSink(new Sink(), 100, snkFields);
 
 		/** Connect operators **/
@@ -111,7 +117,7 @@ public class Base implements QueryComposer{
 //		detector2.connectTo(recognizer, true, 0);
 //		recognizer.connectTo(snk, true, 0);
 		
-		for(int i = 0; i < MainActivity.numOps; i++){
+		for(int i = 0; i < FaceService.numOps; i++){
 //			src.connectTo(detectors.get(i), true, 0);
 //			for (int j = 0; j < numRecognizers; j++){
 //				detectors.get(i).connectTo(recognizers.get(j), true, 0);

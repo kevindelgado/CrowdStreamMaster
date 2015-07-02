@@ -35,7 +35,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 
-import com.example.android_seep_master.MainActivity;
+import com.example.android_seep_master.FaceService;
+
 public class Sink implements StatelessOperator {
 	Logger LOG = LoggerFactory.getLogger(Sink.class);
 	private static final long serialVersionUID = 1L;
@@ -53,15 +54,15 @@ public class Sink implements StatelessOperator {
 	public static HashMap<Integer, Integer> totalDelays;
 
 	public void setUp() {
-		myHandler = MainActivity.getTextViewHandler();
-		myHandler2 = MainActivity.getImageViewHandler();
-		myHandler_fps = MainActivity.getTextViewHandler2();
+		myHandler = FaceService.getTextViewHandler();
+		myHandler2 = FaceService.getImageViewHandler();
+		myHandler_fps = FaceService.getTextViewHandler2();
 
 		LOG.info(">>>>>>>>>>>>>>>>>>>Sink set up");
 		initializeFile();
 		
 		totalDelays = new HashMap<Integer, Integer>();
-		for (int i = 1; i <= MainActivity.numOps; i++){
+		for (int i = 1; i <= FaceService.numOps; i++){
 			totalDelays.put(i, 0);
 		}
 	}
@@ -79,15 +80,17 @@ public class Sink implements StatelessOperator {
 		int width = dt.getInt("value9");
 		int height = dt.getInt("value10");
 		int processTime = dt.getInt("value11");
+		int processorIndex = dt.getInt("value12");
+
 
 		long currentTime = System.currentTimeMillis();
 		long pastTimeMillis = currentTime - timeStamp;
 
-		writeToFile(i + " " + pastTimeMillis + " "+  currentTime + "\n");
-		if (i <= MainActivity.numOps-1){
-			totalDelays.put(i+1, (int)pastTimeMillis);
-		}
+		writeToFile(i + " " + pastTimeMillis + " "+  currentTime + " " + processorIndex + "\n");
 		
+		if (i <= 2 * FaceService.numOps - 1){
+		totalDelays.put(processorIndex, (int)pastTimeMillis);
+		}
 		
 		
 		Message msg_name = myHandler.obtainMessage();
@@ -112,7 +115,7 @@ public class Sink implements StatelessOperator {
 			}
 		}
 
-		//LOG.info(">>>Sink receive ["+i+"] at "+currentTime);
+//		LOG.info(">>>Sink receive from {}" + processorIndex);
 
 		Message msg2 = myHandler2.obtainMessage();
 		Bundle b = new Bundle(5);

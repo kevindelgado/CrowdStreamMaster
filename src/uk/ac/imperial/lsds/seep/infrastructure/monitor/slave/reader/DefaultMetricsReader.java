@@ -27,12 +27,11 @@ import com.codahale.metrics.Metric;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.Timer;
-import com.example.android_seep_master.MainActivity;
+import com.example.android_seep_master.FaceService;
 import com.example.query.Detector;
 import com.example.query.ProcessorUnited;
 import com.example.query.Recognizer;
 import com.example.query.Sink;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -296,7 +295,7 @@ public class DefaultMetricsReader implements MetricsReader {
 	}
 
 	private MetricValue readBatteryLife(){
-		Intent batteryIntent = MainActivity.getAppContext().registerReceiver(null,
+		Intent batteryIntent = FaceService.getAppContext().registerReceiver(null,
                 new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 		int rawlevel = batteryIntent.getIntExtra("level", -1);
 		double scale = batteryIntent.getIntExtra("scale", -1);
@@ -313,7 +312,7 @@ public class DefaultMetricsReader implements MetricsReader {
 	}
 	
 	private MetricValue readWifiStrength(){
-		WifiInfo wifiInfo = MainActivity.mainWifi.getConnectionInfo();
+		WifiInfo wifiInfo = FaceService.mainWifi.getConnectionInfo();
 		int strength=0;
 		if(wifiInfo.getBSSID()!=null){
 			strength = WifiManager.calculateSignalLevel(wifiInfo.getRssi(), 10);

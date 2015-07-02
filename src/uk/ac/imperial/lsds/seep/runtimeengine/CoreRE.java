@@ -808,29 +808,10 @@ public class CoreRE {
 	}
 
 	public void processMetrics(String metrics, int opId){
-//		LOG.info("Received metrics from opId: {} and the value is {}", opId, Double.parseDouble(metrics));
-//		processingUnit.getOperator().getRouter().updateRoutingImpl(processingUnit.getOperator().getOpContext(), opId, (int)(100-Double.parseDouble(metrics)));
+		LOG.info("Received metrics from opId: {} and the value is {}", opId, Double.parseDouble(metrics));
 
-//		int result = (int) Double.parseDouble(metrics);
-//		int score = 0;
-//		if (result!=0)
-//			score = 1000/(result+25);
-
-//		String[] parts = metrics.split(";");
-//		String part1 = parts[0]; // network
-//		String part2 = parts[1]; // process
-
-//		double networkDelay = Double.parseDouble(part1)/1000;
-//		double processDelay = Double.parseDouble(part2)/1000;
+		int processingDelay = (int) Double.parseDouble(metrics);
 		
-		
-//		double networkDelay = Double.parseDouble(part1)/1000;
-		double processDelay = Double.parseDouble(metrics);
-		
-//		if (queueLength < 0)
-//			queueLength = 0;
-		
-//		processingUnit.getOperator().getRouter().updateRoutingImpl(processingUnit.getOperator().getOpContext(), opId, score);
-		processingUnit.getOperator().getRouter().updateRoutingImpl(processingUnit.getOperator().getOpContext(), opId, processDelay);
+		processingUnit.getOperator().getRouter().updateRoutingImpl(processingUnit.getOperator().getOpContext(), opId, processingDelay);
 	}
 }

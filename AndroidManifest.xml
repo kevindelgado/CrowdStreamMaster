@@ -25,10 +25,10 @@
         android:label="EdgeStream" 
         >
         <activity
-             android:screenOrientation="landscape" 
-       		 android:configChanges="orientation|keyboardHidden"
-            android:name="com.example.android_seep_master.MainActivity"
-            android:label="EdgeStream" 
+            android:screenOrientation="portrait" 
+       		android:configChanges="orientation|keyboardHidden"
+            android:name="com.example.android_seep_master.MainListActivity"
+            android:label="EdgeStreamList" 
             android:icon="@drawable/ic_action_ibm"
             android:largeHeap="true">
             <intent-filter>
@@ -37,6 +37,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:screenOrientation="landscape" 
+       		android:configChanges="orientation|keyboardHidden"
+            android:name="com.example.android_seep_master.MainActivity"
+            android:label="EdgeStream" 
+            android:icon="@drawable/ic_action_ibm"
+            android:largeHeap="true">
+            <!--  
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
+        </activity>
+        
+        <service 
+            android:name="com.example.android_seep_master.FaceService"
+      		android:process=":remote">
+            <intent-filter>
+                <action android:name="com.example.android_seep_master.FaceService" />
+            </intent-filter>
+            
+        </service>
     </application>
 	
 

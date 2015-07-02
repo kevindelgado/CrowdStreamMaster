@@ -25,7 +25,6 @@ public interface RoutingStrategyI {
     
 	public int[] newStaticReplica(int oldOpIndex, int newOpIndex);
     public int[] collapseStaticReplica(int opIndex);
-    public void updateScoreMap(int index, int score);
-    public void updateDelays(int index,  double processDelay);
+    public void updateProcessingDelays(int index, int score);
 	void reduceDownstreamSize();
 }

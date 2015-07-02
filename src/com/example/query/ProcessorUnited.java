@@ -28,7 +28,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 
-import com.example.android_seep_master.MainActivity;
+import com.example.android_seep_master.FaceService;
 
 import uk.ac.imperial.lsds.seep.comm.serialization.DataTuple;
 import uk.ac.imperial.lsds.seep.exception.ValuedException;
@@ -65,8 +65,8 @@ public class ProcessorUnited implements StatelessOperator{
 	public void setUp() {
 		// TODO Auto-generated method stub
 		LOG.info(">>>>>>>>>>>>>>>>>>>>Processor set up");
-		myHandler = MainActivity.getTextViewHandler();
-		myHandler2 = MainActivity.getImageViewHandler();
+		myHandler = FaceService.getTextViewHandler();
+		myHandler2 = FaceService.getImageViewHandler();
 		initializeFile();
 	}
 	
@@ -102,8 +102,8 @@ public class ProcessorUnited implements StatelessOperator{
 
 			MatOfRect faces = new MatOfRect();
 
-			if (MainActivity.mJavaDetector != null)
-				MainActivity.mJavaDetector.detectMultiScale(mGray, faces, 1.1, 2, 2, // TODO: objdetect.CV_HAAR_SCALE_IMAGE
+			if (FaceService.mJavaDetector != null)
+				FaceService.mJavaDetector.detectMultiScale(mGray, faces, 1.1, 2, 2, // TODO: objdetect.CV_HAAR_SCALE_IMAGE
 						new Size(mAbsoluteFaceSize, mAbsoluteFaceSize), new Size());
 
 
@@ -114,8 +114,8 @@ public class ProcessorUnited implements StatelessOperator{
 				m=mGray.submat(facesArray[0]);
 				mBitmap = Bitmap.createBitmap(m.width(),m.height(), Bitmap.Config.ARGB_8888);
 				Utils.matToBitmap(m, mBitmap);	
-				name=MainActivity.fr.predict(m);
-				mLikely=MainActivity.fr.getProb();
+				name=FaceService.fr.predict(m);
+				mLikely=FaceService.fr.getProb();
 				if(mLikely == -1)
 					name="Unknown";
 				if(index < 66 && name.contains("Mandis")){

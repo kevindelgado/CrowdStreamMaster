@@ -736,8 +736,8 @@ System.out.println("there are: "+filesToStream.size()+" to stream");
 	public void sendResourceInfoToUpstreams(){
 //		MetricValue cpu = metricsReader.readCpuUtilization();
 //		String outputMetricString = cpu.toString();
-		
-//		MetricValue cpu = metricsReader.readValue(MetricName.QUEUE_LENGTH);
+//		
+//		MetricValue queue = metricsReader.readValue(MetricName.QUEUE_LENGTH);
 //		MetricValue processTime = null;
 //		if (pu.getOperator().getOperatorId()%2 == 0){
 //			processTime = metricsReader.readValue(MetricName.TRANSLATE_TIME);
@@ -746,12 +746,11 @@ System.out.println("there are: "+filesToStream.size()+" to stream");
 //		}
 		
 //		MetricValue network = metricsReader.readNetworkDelay();
-//		MetricValue process = metricsReader.readProcessTime();
-//		String outputMetricString = "" + network + ";" + process;
-		
-		
 		MetricValue process = metricsReader.readProcessTime();
-		String outputMetricString = ""+ process.toString();
+//		String outputMetricString = "" + network + ";" + process;
+		String outputMetricString = process.toString();
+		
+//		String outputMetricString = ""+ process.toString() + ";" + queue.toString();
 				
 		ControlTuple rb = new ControlTuple().makeMetric(outputMetricString,pu.getOperator().getOperatorId());
 		owner.getControlDispatcher().sendAllUpstreams(rb);
