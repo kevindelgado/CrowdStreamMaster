@@ -44,6 +44,7 @@ import android.text.format.Time;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -63,6 +64,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -90,6 +93,23 @@ public class FaceService extends Service {
 	Service self;
 	Main instance;
 	static Context context;
+	
+	private NotificationManager nm;
+	private String currentFps;
+	private String currentRecognized;
+	
+
+    ArrayList<Messenger> mClients = new ArrayList<Messenger>(); // Keeps track of all current registered clients.
+    int mValue = 0; // Holds last value set by a client.
+    static final int MSG_REGISTER_CLIENT = 1;
+    static final int MSG_UNREGISTER_CLIENT = 2;
+    static final int MSG_SET_INT_VALUE = 3;
+    static final int MSG_SET_STRING_VALUE = 4;
+    static final int MSG_SET_PORT_NUMS = 5;
+    static final int MSG_SET_FACE_RESULT = 6;
+    final Messenger mMessenger = new Messenger(new IncomingHandler()); // Target we publish for clients to send messages to IncomingHandler.
+
+
 
 //	ToggleButton btn_local;
 //	ToggleButton btn_remote;
@@ -136,9 +156,10 @@ public class FaceService extends Service {
 	static int currentFrameIndex = 0;
 
 	public static int fps = 0;
-	//public static int port = 2001;
-	public String port1;
-	public String nextPort1;
+	public static int port = 2001;
+	//public String port1;
+	//public String nextPort1;
+	private static int port1;
 	private int port2;
 	private int port3;
 
@@ -150,7 +171,51 @@ public class FaceService extends Service {
 	public int randomNum = 0;
 
 	public static int numOps = 1;
-
+	//private int numOps;
+	
+	
+	@Override
+	public IBinder onBind(Intent intent) {
+		return mMessenger.getBinder();
+	}
+	
+	class IncomingHandler extends Handler {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case MSG_REGISTER_CLIENT:
+				mClients.add(msg.replyTo);
+				break;
+			case MSG_UNREGISTER_CLIENT:
+				mClients.remove(msg.replyTo);
+				break;
+			case MSG_SET_PORT_NUMS:
+				PortData portData = (PortData) msg.getData().getParcelable("PortData");
+				port1 = portData.getPort1();
+				port2 = portData.getPort2();
+				port3 = portData.getPort3();
+			}
+		}
+		
+	}
+	
+	private void sendMessageToUI(String fps, String recognized) {
+		for (int i=mClients.size()-1; i>=0; i--) {
+			try {
+				FaceResult currentData = new FaceResult(recognized, fps);
+				Message msg = Message.obtain(null, MSG_SET_FACE_RESULT);
+				Bundle b = new Bundle();
+				b.putParcelable("FaceResult", currentData);
+				msg.setData(b);
+				mClients.get(i).send(msg);
+			}
+			catch (RemoteException e) {
+				// The client is dead
+				mClients.remove(i);
+			}
+		}
+	}
+	
 	@Override
 	public void onCreate() {
 		//this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -199,7 +264,9 @@ public class FaceService extends Service {
 			@Override
 			public void handleMessage(Message msg) {
 				if (msg.obj != null){
-					textresult = (msg.obj.toString());
+					//textresult = (msg.obj.toString());
+					currentFps = msg.obj.toString();
+					sendMessageToUI(currentFps, currentRecognized);
 				} 
 			}
 		};
@@ -208,7 +275,9 @@ public class FaceService extends Service {
 			@Override
 			public void handleMessage(Message msg) {
 				if (msg.obj != null){	
-					textresult2 = msg.obj.toString();
+					//textresult2 = msg.obj.toString();
+					currentRecognized = msg.obj.toString();
+					sendMessageToUI(currentFps, currentRecognized);
 				} 
 			}
 		};
@@ -412,17 +481,14 @@ public class FaceService extends Service {
 	}
 	
 	public static String getPort(int num) {
-		return "" + FaceService.port + num;	
+		//return "" + port1 + num;
+		return "" + port + num;
 	}
 	
 	public static String getNextPort() {
-		return "" + FaceService.port++;
+		return "" + port++;
 	}
 
-	@Override
-	public IBinder onBind(Intent intent) {
-		return null;
-	}
 
 }
 

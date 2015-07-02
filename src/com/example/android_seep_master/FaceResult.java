@@ -18,23 +18,23 @@ public final class FaceResult implements Parcelable {
 	};
 	
 	private String nameRecognized;
-	private int outputFPS;
+	private String outputFPS;
 	
-	public FaceResult(String name, int fps) {
+	public FaceResult(String name, String fps) {
 		this.nameRecognized = name;
 		this.outputFPS = fps;
 	}
 	
 	private FaceResult(Parcel source) {
 		nameRecognized = source.readString();
-		outputFPS = source.readInt();
+		outputFPS = source.readString();
 	}
 	
 	public String getName() {
 		return nameRecognized;
 	}
 	
-	public int getFPS() {
+	public String getFPS() {
 		return outputFPS;
 	}
 
@@ -47,7 +47,7 @@ public final class FaceResult implements Parcelable {
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(nameRecognized);
-		dest.writeInt(outputFPS);
+		dest.writeString(outputFPS);
 	}
 
 }

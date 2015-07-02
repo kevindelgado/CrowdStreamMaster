@@ -7,17 +7,45 @@
     android:orientation="vertical" 
     tools:context="com.example.android_seep_master.MainListActivity" > 
 
-    <Button
-        android:id="@+id/button_new"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New"
-        android:onClick="newProcess" />
-
+    <RelativeLayout android:id="@+id/RelativeLayoutButtons" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+        
+        <Button
+        	android:id="@+id/button_new"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:text="New"
+        	android:onClick="newProcess" />
+        
+        <Button
+            android:id="@+id/button_cancel_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel All"
+            android:layout_alignParentRight="true"
+            android:onClick="cancelAll" />
+        
+    </RelativeLayout>
+   
+    <TextView android:id="@+id/textFpsValue" 
+        android:textSize="24sp" 
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content" 
+        android:text="FPS Goes Here" />
+    
+	<TextView android:id="@+id/textNameValue" 
+	    android:textSize="24sp" 
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content" 
+	    android:text="Recognized Name Goes Here" />	
+<!-- 
     <ListView
         android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </ListView>
+-->
+
 
 </LinearLayout>
