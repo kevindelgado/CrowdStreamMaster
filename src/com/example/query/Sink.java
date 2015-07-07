@@ -35,7 +35,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 
-import com.example.android_seep_master.FaceService;
+import com.example.android_seep_master.FaceTask;
 
 public class Sink implements StatelessOperator {
 	Logger LOG = LoggerFactory.getLogger(Sink.class);
@@ -54,15 +54,15 @@ public class Sink implements StatelessOperator {
 	public static HashMap<Integer, Integer> totalDelays;
 
 	public void setUp() {
-		myHandler = FaceService.getTextViewHandler();
-		myHandler2 = FaceService.getImageViewHandler();
-		myHandler_fps = FaceService.getTextViewHandler2();
+		myHandler = FaceTask.getTextViewHandler();
+		myHandler2 = FaceTask.getImageViewHandler();
+		myHandler_fps = FaceTask.getTextViewHandler2();
 
 		LOG.info(">>>>>>>>>>>>>>>>>>>Sink set up");
 		initializeFile();
 		
 		totalDelays = new HashMap<Integer, Integer>();
-		for (int i = 1; i <= FaceService.numOps; i++){
+		for (int i = 1; i <= FaceTask.numOps; i++){
 			totalDelays.put(i, 0);
 		}
 	}
@@ -88,7 +88,7 @@ public class Sink implements StatelessOperator {
 
 		writeToFile(i + " " + pastTimeMillis + " "+  currentTime + " " + processorIndex + "\n");
 		
-		if (i <= 2 * FaceService.numOps - 1){
+		if (i <= 2 * FaceTask.numOps - 1){
 		totalDelays.put(processorIndex, (int)pastTimeMillis);
 		}
 		

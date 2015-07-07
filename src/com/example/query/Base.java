@@ -20,7 +20,7 @@ import uk.ac.imperial.lsds.seep.operator.Connectable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.example.android_seep_master.FaceService;
+import com.example.android_seep_master.FaceTask;
 public class Base implements QueryComposer{
 	Logger LOG = LoggerFactory.getLogger(Base.class);
 
@@ -83,7 +83,7 @@ public class Base implements QueryComposer{
 //			recognizers.add(QueryBuilder.newStatelessOperator(new Recognizer(), (i+1)*2, pFields));
 //		}
 		
-		for (int i = 0; i < FaceService.numOps; i++){
+		for (int i = 0; i < FaceTask.numOps; i++){
 //			detectors.add(QueryBuilder.newStatelessOperator(new Detector(), i*2+1, pFields));
 //			recognizers.add(QueryBuilder.newStatelessOperator(new Recognizer(), (i+1)*2, pFields));
 			processors.add(QueryBuilder.newStatelessOperator(new ProcessorUnited(), i+1, pFields));
@@ -117,7 +117,7 @@ public class Base implements QueryComposer{
 //		detector2.connectTo(recognizer, true, 0);
 //		recognizer.connectTo(snk, true, 0);
 		
-		for(int i = 0; i < FaceService.numOps; i++){
+		for(int i = 0; i < FaceTask.numOps; i++){
 //			src.connectTo(detectors.get(i), true, 0);
 //			for (int j = 0; j < numRecognizers; j++){
 //				detectors.get(i).connectTo(recognizers.get(j), true, 0);

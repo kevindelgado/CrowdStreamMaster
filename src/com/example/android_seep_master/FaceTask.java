@@ -2,91 +2,72 @@ package com.example.android_seep_master;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.IBinder;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.concurrent.ExecutionException;
 
 import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
-import org.opencv.android.Utils;
-//import org.opencv.contrib.FaceRecognizer;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfRect;
-import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
-import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.objdetect.CascadeClassifier;
 
-import com.googlecode.javacv.cpp.opencv_contrib.FaceRecognizer;
-import com.googlecode.javacv.cpp.opencv_imgproc;
 import com.example.query.Base;
 import com.example.query.PersonRecognizer;
 import com.example.query.Source;
-import com.example.query.Tutorial3View;
-import com.example.query.labels;
 
-import android.support.v4.app.Fragment;
-import android.text.format.Time;
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.AlertDialog;
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.ContextWrapper;
 import android.content.IntentFilter;
+import android.content.IntentSender;
+import android.content.IntentSender.SendIntentException;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.AssetManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.content.res.Resources.Theme;
+import android.database.DatabaseErrorHandler;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.nsd.NsdServiceInfo;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.os.UserHandle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.view.ContextThemeWrapper;
+import android.view.Display;
+import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 import uk.ac.imperial.lsds.seep.Main;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FaceService extends Service {
+public class FaceTask extends ContextThemeWrapper implements Runnable {
 	private static final String    TAG                 = "Android-Seep-FR::Activity";
 	Logger LOG = LoggerFactory.getLogger(Base.class);
 
@@ -94,7 +75,6 @@ public class FaceService extends Service {
 	Main instance;
 	static Context context;
 
-	private NotificationManager nm;
 	private String currentFps = "";
 	private String currentRecognized = "";
 
@@ -130,19 +110,16 @@ public class FaceService extends Service {
 	String textresult;
 	String textresult2;
 	String textWelcome;
+	
+	TextView fpsResult;
+	TextView recognizedResult;
 
 	private static Handler mImageViewHandler;
 	private static Handler mTextViewHandler;
 	private static Handler mTextViewHandler2;
 	private Handler mHandler2 = new Handler();
 
-	public static final int        JAVA_DETECTOR       = 0;
-	public static final int        NATIVE_DETECTOR     = 1;
-	private File                   mCascadeFile;
-	public static CascadeClassifier      mJavaDetector;
-	private String[]               mDetectorName;
-	String mPath="";
-	public static PersonRecognizer fr;
+	
 	com.googlecode.javacv.cpp.opencv_contrib.FaceRecognizer faceRecognizer;
 
 	static final long MAXIMG = 10;
@@ -162,7 +139,7 @@ public class FaceService extends Service {
 	private static int port1;
 	private int port2;
 	private int port3;
-	private boolean portsReceived = false;
+	public static CascadeClassifier mJavaDetector;
 
 	public static boolean isLocal = false;
 
@@ -173,12 +150,29 @@ public class FaceService extends Service {
 
 	public static int numOps = 1;
 	//private int numOps;
+	public static PersonRecognizer fr = MainListActivity.fr;
 
+	public FaceTask(String[] ports, TextView[] TextViews) {
+		port1 = Integer.parseInt(ports[0]);
+		port2 = Integer.parseInt(ports[1]);
+		port3 = Integer.parseInt(ports[2]);
+		fpsResult = TextViews[0];
+		recognizedResult = TextViews[1];
+		
+		mJavaDetector = MainListActivity.mJavaDetector;
+		mainWifi = MainListActivity.mainWifi;
+		level = MainListActivity.level;
+		scale = MainListActivity.scale;
+		createTask();
 
+	}
+
+	/*
 	@Override
 	public IBinder onBind(Intent intent) {
 		return mMessenger.getBinder();
 	}
+	 */
 
 	class IncomingHandler extends Handler {
 		@Override
@@ -195,7 +189,6 @@ public class FaceService extends Service {
 				port1 = portData.getPort1();
 				port2 = portData.getPort2();
 				port3 = portData.getPort3();
-				portsReceived = true;
 			}
 		}
 
@@ -223,26 +216,25 @@ public class FaceService extends Service {
 
 	}
 
-	@Override
-	public void onCreate() {
+	public void run() {
+		startTask();
+	}
+
+	public void createTask() {
 		//this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		//getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		//setContentView(R.layout.activity_individual_thread);
+		
+		//OpenCVLoader.initDebug(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);
 
-		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);
+		//self = this;
+		//context = getApplicationContext();
 
-		self = this;
-		context = getApplicationContext();
-
-		mPath=Environment.getExternalStorageDirectory()+"/facerecogOCV/";
-		mDetectorName = new String[2];
-		mDetectorName[JAVA_DETECTOR] = "Java";
-		mDetectorName[NATIVE_DETECTOR] = "Native (tracking)";
-
+		
 		//configureGUIandAddListeners();
 		configureHandlers();
 
-
+/*
 		mainWifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
 			@Override
@@ -253,7 +245,7 @@ public class FaceService extends Service {
 		};
 		IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
 		registerReceiver(batteryReceiver, filter);
-
+*/
 
 		/**********************************************************
 		 ***************** Starting Master ************************
@@ -273,7 +265,8 @@ public class FaceService extends Service {
 				if (msg.obj != null){
 					//textresult = (msg.obj.toString());
 					currentRecognized = msg.obj.toString();
-					sendMessageToUI(currentFps, currentRecognized);
+					//sendMessageToUI(currentFps, currentRecognized);
+					recognizedResult.setText(msg.obj.toString());
 					Log.i("FaceService", "currr rec: " + currentRecognized);
 				} 
 			}
@@ -285,7 +278,8 @@ public class FaceService extends Service {
 				if (msg.obj != null){	
 					//textresult2 = msg.obj.toString();
 					currentFps = msg.obj.toString();
-					sendMessageToUI(currentFps, currentRecognized);
+					//sendMessageToUI(currentFps, currentRecognized);
+					fpsResult.setText(msg.obj.toString());
 					Log.i("FaceService", "currr FPS: " + currentFps);
 				} 
 			}
@@ -321,17 +315,17 @@ public class FaceService extends Service {
 		};
 	}
 
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId)  {
+
+	public void startTask()  {
 		//while(!portsReceived){
 		//	// Chill
 		//}
 		//Log.i("LocalService", "PORTS RECEIVED");
-		port1 = Integer.parseInt(intent.getStringExtra("Port1"));
-		port2 = Integer.parseInt(intent.getStringExtra("Port2"));
-		port3 = Integer.parseInt(intent.getStringExtra("Port3"));
+		//port1 = Integer.parseInt(intent.getStringExtra("Port1"));
+		//port2 = Integer.parseInt(intent.getStringExtra("Port2"));
+		//port3 = Integer.parseInt(intent.getStringExtra("Port3"));
 		try{
-			Log.i("LocalService", "Received start id " + startId + ": " + intent);
+			//Log.i("LocalService", "Received start id " + startId + ": " + intent);
 			// We want this service to continue running until it is explicitly
 			// stopped, so return sticky.
 
@@ -348,7 +342,7 @@ public class FaceService extends Service {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return START_STICKY;
+		//return START_STICKY;
 	}
 
 	private void startDeploy() {
@@ -421,7 +415,7 @@ public class FaceService extends Service {
 
 	}
 
-
+/*
 	private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
 		@Override
 		public void onManagerConnected(int status) {
@@ -471,13 +465,13 @@ public class FaceService extends Service {
 		}
 	};
 
-
+*/
 
 
 
 
 	public void onDestroy() {
-		super.onDestroy();
+		//super.onDestroy();
 		android.os.Process.killProcess(android.os.Process.myPid());
 	}
 
@@ -506,35 +500,12 @@ public class FaceService extends Service {
 		//return "" + port++;
 		return "" + port1++;
 	}
-
+	
+	/*@Override
+	public void onResume() {
+		super.onResume();
+		O
+	}*/
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

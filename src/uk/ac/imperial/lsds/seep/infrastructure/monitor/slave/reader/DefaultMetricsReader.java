@@ -27,7 +27,7 @@ import com.codahale.metrics.Metric;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.Timer;
-import com.example.android_seep_master.FaceService;
+import com.example.android_seep_master.FaceTask;
 import com.example.query.Detector;
 import com.example.query.ProcessorUnited;
 import com.example.query.Recognizer;
@@ -295,7 +295,7 @@ public class DefaultMetricsReader implements MetricsReader {
 	}
 
 	private MetricValue readBatteryLife(){
-		Intent batteryIntent = FaceService.getAppContext().registerReceiver(null,
+		Intent batteryIntent = FaceTask.getAppContext().registerReceiver(null,
                 new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 		int rawlevel = batteryIntent.getIntExtra("level", -1);
 		double scale = batteryIntent.getIntExtra("scale", -1);
@@ -312,7 +312,7 @@ public class DefaultMetricsReader implements MetricsReader {
 	}
 	
 	private MetricValue readWifiStrength(){
-		WifiInfo wifiInfo = FaceService.mainWifi.getConnectionInfo();
+		WifiInfo wifiInfo = FaceTask.mainWifi.getConnectionInfo();
 		int strength=0;
 		if(wifiInfo.getBSSID()!=null){
 			strength = WifiManager.calculateSignalLevel(wifiInfo.getRssi(), 10);

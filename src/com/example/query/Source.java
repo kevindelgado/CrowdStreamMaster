@@ -41,7 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 //import com.example.android_seep_master.MainActivity;
-import com.example.android_seep_master.FaceService;
+import com.example.android_seep_master.FaceTask;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -90,7 +90,7 @@ public class Source implements StatelessOperator  {
 		@Override
 		public void run(){
 
-			while(FaceService.isSystemRunning){	
+			while(FaceTask.isSystemRunning){	
 				bitmap = bitmaps[0]; //getFrameV2(i);	
 
 
