@@ -93,29 +93,29 @@ public class FaceService extends Service {
 	Service self;
 	Main instance;
 	static Context context;
-	
+
 	private NotificationManager nm;
-	private String currentFps;
-	private String currentRecognized;
-	
-
-    ArrayList<Messenger> mClients = new ArrayList<Messenger>(); // Keeps track of all current registered clients.
-    int mValue = 0; // Holds last value set by a client.
-    static final int MSG_REGISTER_CLIENT = 1;
-    static final int MSG_UNREGISTER_CLIENT = 2;
-    static final int MSG_SET_INT_VALUE = 3;
-    static final int MSG_SET_STRING_VALUE = 4;
-    static final int MSG_SET_PORT_NUMS = 5;
-    static final int MSG_SET_FACE_RESULT = 6;
-    final Messenger mMessenger = new Messenger(new IncomingHandler()); // Target we publish for clients to send messages to IncomingHandler.
+	private String currentFps = "";
+	private String currentRecognized = "";
 
 
+	ArrayList<Messenger> mClients = new ArrayList<Messenger>(); // Keeps track of all current registered clients.
+	int mValue = 0; // Holds last value set by a client.
+	static final int MSG_REGISTER_CLIENT = 1;
+	static final int MSG_UNREGISTER_CLIENT = 2;
+	static final int MSG_SET_INT_VALUE = 3;
+	static final int MSG_SET_STRING_VALUE = 4;
+	static final int MSG_SET_PORT_NUMS = 5;
+	static final int MSG_SET_FACE_RESULT = 6;
+	final Messenger mMessenger = new Messenger(new IncomingHandler()); // Target we publish for clients to send messages to IncomingHandler.
 
-//	ToggleButton btn_local;
-//	ToggleButton btn_remote;
-//	ToggleButton btn_deploy;
-//	ToggleButton btn_start;
-//	Button btn_stop;
+
+
+	//	ToggleButton btn_local;
+	//	ToggleButton btn_remote;
+	//	ToggleButton btn_deploy;
+	//	ToggleButton btn_start;
+	//	Button btn_stop;
 	/*
 	ImageView mImageView;
 	ImageView drawingImage;
@@ -124,7 +124,7 @@ public class FaceService extends Service {
 	TextView textWelcome;
 	Button btn_fps;
 	Button btn_port;
-	*/
+	 */
 	Bitmap mImageView;
 	Bitmap drawingImage;
 	String textresult;
@@ -156,12 +156,13 @@ public class FaceService extends Service {
 	static int currentFrameIndex = 0;
 
 	public static int fps = 0;
-	public static int port = 2001;
+	//public static int port = 2001;
 	//public String port1;
 	//public String nextPort1;
 	private static int port1;
 	private int port2;
 	private int port3;
+	private boolean portsReceived = false;
 
 	public static boolean isLocal = false;
 
@@ -172,13 +173,13 @@ public class FaceService extends Service {
 
 	public static int numOps = 1;
 	//private int numOps;
-	
-	
+
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		return mMessenger.getBinder();
 	}
-	
+
 	class IncomingHandler extends Handler {
 		@Override
 		public void handleMessage(Message msg) {
@@ -194,12 +195,15 @@ public class FaceService extends Service {
 				port1 = portData.getPort1();
 				port2 = portData.getPort2();
 				port3 = portData.getPort3();
+				portsReceived = true;
 			}
 		}
-		
+
 	}
-	
+
 	private void sendMessageToUI(String fps, String recognized) {
+
+		Log.i("FaceService", "Clients size: " + mClients.size());
 		for (int i=mClients.size()-1; i>=0; i--) {
 			try {
 				FaceResult currentData = new FaceResult(recognized, fps);
@@ -207,23 +211,26 @@ public class FaceService extends Service {
 				Bundle b = new Bundle();
 				b.putParcelable("FaceResult", currentData);
 				msg.setData(b);
-				mClients.get(i).send(msg);
+				//Log.i("FaceService",currentData.getFPS()  +" RECD: " + currentData.getName());
+				Messenger client = mClients.get(i);
+				client.send(msg);
 			}
 			catch (RemoteException e) {
 				// The client is dead
 				mClients.remove(i);
 			}
 		}
+
 	}
-	
+
 	@Override
 	public void onCreate() {
 		//this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		//getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		//setContentView(R.layout.activity_individual_thread);
-		
+
 		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);
-		
+
 		self = this;
 		context = getApplicationContext();
 
@@ -255,7 +262,7 @@ public class FaceService extends Service {
 		instance.executeMaster();
 
 	}
-	
+
 	/**********************************************************
 	 ***************** Message Handlers ***********************
 	 **********************************************************/
@@ -265,8 +272,9 @@ public class FaceService extends Service {
 			public void handleMessage(Message msg) {
 				if (msg.obj != null){
 					//textresult = (msg.obj.toString());
-					currentFps = msg.obj.toString();
+					currentRecognized = msg.obj.toString();
 					sendMessageToUI(currentFps, currentRecognized);
+					Log.i("FaceService", "currr rec: " + currentRecognized);
 				} 
 			}
 		};
@@ -276,8 +284,9 @@ public class FaceService extends Service {
 			public void handleMessage(Message msg) {
 				if (msg.obj != null){	
 					//textresult2 = msg.obj.toString();
-					currentRecognized = msg.obj.toString();
+					currentFps = msg.obj.toString();
 					sendMessageToUI(currentFps, currentRecognized);
+					Log.i("FaceService", "currr FPS: " + currentFps);
 				} 
 			}
 		};
@@ -314,6 +323,13 @@ public class FaceService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)  {
+		//while(!portsReceived){
+		//	// Chill
+		//}
+		//Log.i("LocalService", "PORTS RECEIVED");
+		port1 = Integer.parseInt(intent.getStringExtra("Port1"));
+		port2 = Integer.parseInt(intent.getStringExtra("Port2"));
+		port3 = Integer.parseInt(intent.getStringExtra("Port3"));
 		try{
 			Log.i("LocalService", "Received start id " + startId + ": " + intent);
 			// We want this service to continue running until it is explicitly
@@ -338,11 +354,11 @@ public class FaceService extends Service {
 	private void startDeploy() {
 		// TODO Auto-generated method stub
 		final String classname = "com.example.query.Base";
-		
-		instance.deploy(classname, 40000, 50000);	
+
+		instance.deploy(classname, port2, port3);	
 		mHandler2.postDelayed(new Runnable() {
 			public void run() {
-				instance.deploy0(40000, 50000);
+				instance.deploy0(port2, port3);
 			}
 		}, 500);
 		mHandler2.postDelayed(new Runnable() {
@@ -370,22 +386,23 @@ public class FaceService extends Service {
 			private void startStart() {
 				isSystemRunning = true;
 				instance.start();
-				
+
 			}
 		}, 7500);
-		
+
 	}
 
 	private void preDeploy() {
 		// TODO Auto-generated method stub
 		Main instance2 = new Main();
 		String worker = "Worker";
-		String port = "2002";
+		//String port = "2002";
+		String port = "" + (port1 + 1);
 		//String port = getPort(1);
 		String[] args = {worker, port};
 		args[1] = port;
 		instance2.executeSec(args);
-		
+
 	}
 
 	private void startRemote() {
@@ -396,14 +413,14 @@ public class FaceService extends Service {
 		//btn_local.setClickable(false);
 		Main instance1 = new Main();
 		String worker = "Worker";
-		String port = "2001";
+		String port = "" + port1;
 		//String port = getPort(0);
 		String[] args = {worker, port};
 		instance1.executeSec(args);
 
 
 	}
-	
+
 
 	private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
 		@Override
@@ -457,7 +474,7 @@ public class FaceService extends Service {
 
 
 
-	
+
 
 	public void onDestroy() {
 		super.onDestroy();
@@ -479,14 +496,15 @@ public class FaceService extends Service {
 	public static Context getAppContext(){
 		return context;
 	}
-	
+
 	public static String getPort(int num) {
-		//return "" + port1 + num;
-		return "" + port + num;
+		return "" + port1 + num;
+		//return "" + port + num;
 	}
-	
+
 	public static String getNextPort() {
-		return "" + port++;
+		//return "" + port++;
+		return "" + port1++;
 	}
 
 

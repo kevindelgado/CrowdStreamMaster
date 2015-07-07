@@ -1,15 +1,10 @@
 package com.example.android_seep_master;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.android_seep_master.NewProcessPopup.OnSubmitListener;
 
-import uk.ac.imperial.lsds.seep.Main;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -18,22 +13,14 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.support.v7.widget.PopupMenu;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class MainListActivity extends Activity{
+
+public class MainListActivity extends Activity implements OnSubmitListener{
 	//ListView listView;
 	Button btn_new;
 	Button btn_cancel_all;
@@ -42,7 +29,9 @@ public class MainListActivity extends Activity{
 	Messenger mService = null;
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 
-	PopupWindow popup;
+	NewProcessPopup popup;
+	Context context;
+	
 	EditText port1;
 	EditText port2;
 	EditText port3;
@@ -51,9 +40,15 @@ public class MainListActivity extends Activity{
 	class IncomingHandler extends Handler {
 		@Override
 		public void handleMessage(Message msg) {
-			FaceResult faceResult = (FaceResult) msg.getData().getParcelable("FaceResult");
-			textFpsValue.setText("FPS: " + faceResult.getFPS());
-			textNameValue.setText("Recognized: " + faceResult.getName());
+			if(msg.what == FaceService.MSG_SET_FACE_RESULT){
+				Log.i("MainListActivity", "new face");
+				FaceResult faceResult = (FaceResult) msg.getData().getParcelable("FaceResult");
+				textFpsValue.setText("FPS: " + faceResult.getFPS());
+				//Log.i("MainListActivity", "SHOW FPS :" + faceResult.getFPS());
+				textNameValue.setText("Recognized: " + faceResult.getName());
+				//Log.i("MainListActivity", "SHOW REC :" + faceResult.getName());
+
+			}
 		}
 	}
 
@@ -67,7 +62,7 @@ public class MainListActivity extends Activity{
 				mService.send(msg);
 			}
 			catch (RemoteException e) {
-
+				Log.i("MainListActivity", "Service crash");
 			}
 		}
 
@@ -85,7 +80,8 @@ public class MainListActivity extends Activity{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_list);
-
+		configureGuiandAddListeners();
+		
 		//listView = (ListView) findViewById(R.id.listview);
 
 		//final List<FaceResult> list = new ArrayList<FaceResult>();
@@ -93,17 +89,17 @@ public class MainListActivity extends Activity{
 		// Create a new Adapter containing list of processes
 		// Set the adapter on this ListActivity's built-in ListView
 		//setListAdapter(new ArrayAdapter<>)
-		configureGuiandAddListeners();
-		checkIfServiceIsRunning();
+		
+		//checkIfServiceIsRunning();
 	}
-
+	/*
 	private void checkIfServiceIsRunning() {
 		if (FaceService.isSystemRunning) {
 			doBindService();
 		}
 
 	}
-
+	 */
 	void doBindService() {
 		bindService(new Intent(this, FaceService.class), mConnection, Context.BIND_AUTO_CREATE);
 
@@ -143,30 +139,75 @@ public class MainListActivity extends Activity{
 	private void configureGuiandAddListeners() {
 		btn_new = (Button) findViewById(R.id.button_new);
 		registerForContextMenu(btn_new);
+		textFpsValue = (TextView) findViewById(R.id.textFpsValue);
+		textNameValue = (TextView) findViewById(R.id.textNameValue);
+		context = this;
+		popup = new NewProcessPopup(context, this);
+		
 	}
 
 	public void newProcess(View v) {
 		//Intent intent = new Intent(this, MainActivity.class);
 		//startActivity(intent);
-		LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		popup = new PopupWindow(inflater.inflate(R.layout.new_process_popup, null, false), 
-				300, 
-				700, 
-				true);
-		popup.showAtLocation(this.findViewById(R.id.button_new), Gravity.CENTER, 0, 0);
+		//LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		//popup = new PopupWindow(inflater.inflate(R.layout.new_process_popup, null, false), 
+		//		300, 
+		//		700, 
+		//		true);
+		//popup.showAtLocation(this.findViewById(R.id.button_new), Gravity.CENTER, 0, 0);
+		
+		//initializePorts();
 		//popup.setFocusable(true);
 		//popup.update();
-
+		popup.show(this.findViewById(R.id.button_new));
 	}
 
+
+	/*
 	public void startProcess(View v) {
 		// Start remote connection
 		Intent intent = new Intent(FaceService.class.getName());
+		String one = port1.getText().toString();
+		String two = port2.getText().toString();
+		String three = port3.getText().toString();
+		sendPortNums(one, two, three);
 		startService(intent);
+		doBindService();
+		popup.dismiss();
+	}
+	*/
+	
+	public void valueChanged(String one, String two, String three) {
+		Intent intent = new Intent(FaceService.class.getName());
+		//PortData data = new PortData(Integer.parseInt(one), Integer.parseInt(two), Integer.parseInt(three));
+		//Bundle b = new Bundle();
+		//b.putParcelable("PortData", data);
+		intent.putExtra("Port1", one);
+		intent.putExtra("Port2", two);
+		intent.putExtra("Port3", three);
+		//sendPortNums(one, two, three);
+		startService(intent);
+		doBindService();
 		popup.dismiss();
 	}
 
-	public void cancelProcess(View v) {
-		popup.dismiss();
+	private void sendPortNums(String one, String two, String three) {
+		if (mService != null) {
+			try {
+
+				Message msg = Message.obtain(null, FaceService.MSG_SET_PORT_NUMS);
+				PortData data = new PortData(Integer.parseInt(one), Integer.parseInt(two), Integer.parseInt(three));
+				Bundle b = new Bundle();
+				b.putParcelable("PortData", data);
+				msg.setData(b);
+				msg.replyTo = mMessenger;
+				mService.send(msg);
+			}
+			catch (RemoteException e) {
+				Log.i("MainListActivity", "Port nums exception");
+			}
+		}
 	}
+
+
 }

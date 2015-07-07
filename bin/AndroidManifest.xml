@@ -54,12 +54,11 @@
         </activity>
         
         <service 
-            android:name="com.example.android_seep_master.FaceService"
+            android:name="com.example.android_seep_master.FaceService">
       		android:process=":remote">
             <intent-filter>
                 <action android:name="com.example.android_seep_master.FaceService" />
             </intent-filter>
-            
         </service>
     </application>
 	
