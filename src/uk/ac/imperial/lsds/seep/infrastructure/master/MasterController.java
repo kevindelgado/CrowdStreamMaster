@@ -46,6 +46,9 @@ public class MasterController {
 	
 	private ClassLoader ucl = null;
 	
+	public static int[] inf_pool = {3700, 3500, 3600, 3700, 3800, 3900, 4100, 4200, 4300};
+	public static int index = 0;
+	
     private MasterController() {}
  
     public static MasterController getInstance() {
@@ -56,8 +59,10 @@ public class MasterController {
     ElasticInfrastructureUtils eiu;
 	
 	public void init(){
-		LOG.debug("-> Initializing Master Controller...");
-		inf = new Infrastructure(3500);
+		index++;
+		LOG.debug("-> Initializing Master Controller... IND = " + index);
+		
+		inf = new Infrastructure(inf_pool[index]);
 		eiu = new ElasticInfrastructureUtils(inf);
 		inf.setEiu(eiu);
 		inf.startInfrastructure();

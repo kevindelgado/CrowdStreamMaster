@@ -77,6 +77,7 @@ public class FaceTask extends ContextThemeWrapper implements Runnable {
 
 	private String currentFps = "";
 	private String currentRecognized = "";
+	
 
 
 	ArrayList<Messenger> mClients = new ArrayList<Messenger>(); // Keeps track of all current registered clients.
@@ -267,7 +268,7 @@ public class FaceTask extends ContextThemeWrapper implements Runnable {
 					currentRecognized = msg.obj.toString();
 					//sendMessageToUI(currentFps, currentRecognized);
 					recognizedResult.setText(msg.obj.toString());
-					Log.i("FaceService", "currr rec: " + currentRecognized);
+					//Log.i("FaceService", "currr rec: " + currentRecognized);
 				} 
 			}
 		};
@@ -280,7 +281,7 @@ public class FaceTask extends ContextThemeWrapper implements Runnable {
 					currentFps = msg.obj.toString();
 					//sendMessageToUI(currentFps, currentRecognized);
 					fpsResult.setText(msg.obj.toString());
-					Log.i("FaceService", "currr FPS: " + currentFps);
+					//Log.i("FaceService", "currr FPS: " + currentFps);
 				} 
 			}
 		};

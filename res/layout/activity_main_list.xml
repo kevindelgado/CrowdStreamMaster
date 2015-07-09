@@ -4,48 +4,211 @@
     android:id="@+id/main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    tools:context="com.example.android_seep_master.MainListActivity" > 
+    android:orientation="vertical"
+    tools:context="com.example.android_seep_master.MainListActivity" >
 
-    <RelativeLayout android:id="@+id/RelativeLayoutButtons" 
+    <RelativeLayout
+        android:id="@+id/RelativeLayoutButtons"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
-        
+
         <Button
-        	android:id="@+id/button_new"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:text="New"
-        	android:onClick="newProcess" />
-        
+            android:id="@+id/button_new"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="newProcess"
+            android:text="New" />
+
         <Button
             android:id="@+id/button_cancel_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel All"
             android:layout_alignParentRight="true"
-            android:onClick="cancelAll" />
-        
+            android:onClick="cancelAll"
+            android:text="Cancel All" />
     </RelativeLayout>
-   
-    <TextView android:id="@+id/textFpsValue" 
-        android:textSize="24sp" 
-        android:layout_width="fill_parent" 
+
+    <LinearLayout
+        android:id="@+id/RelativeLayoutList"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" 
-        android:text="FPS Goes Here" />
-    
-	<TextView android:id="@+id/textNameValue" 
-	    android:textSize="24sp" 
-	    android:layout_width="fill_parent" 
-	    android:layout_height="wrap_content" 
-	    android:text="Recognized Name Goes Here" />	
-<!-- 
+        android:orientation="vertical">
+        
+    <RelativeLayout
+        android:id="@+id/Relative0"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textFps0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FPS Goes Here"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textName0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recognized Name Goes Here"
+            android:textSize="14sp"
+            android:layout_toRightOf="@+id/textFps0" />
+        </RelativeLayout>
+        
+    <RelativeLayout
+        android:id="@+id/Relative1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+        
+        <TextView
+            android:id="@+id/textFps1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FPS Goes Here"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textName1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recognized Name Goes Here"
+            android:textSize="14sp"
+            android:layout_toRightOf="@+id/textFps1" />
+        </RelativeLayout>
+        
+        
+    <RelativeLayout
+        android:id="@+id/Relative2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+        <TextView
+            android:id="@+id/textFps2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FPS Goes Here"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textName2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recognized Name Goes Here"
+            android:textSize="14sp"
+            android:layout_toRightOf="@+id/textFps2" />
+        </RelativeLayout>
+        
+        
+    <RelativeLayout
+        android:id="@+id/Relative3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+        <TextView
+            android:id="@+id/textFps3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FPS Goes Here"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textName3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recognized Name Goes Here"
+            android:textSize="14sp"
+            android:layout_toRightOf="@+id/textFps3" />
+        </RelativeLayout>
+        
+        
+    <RelativeLayout
+        android:id="@+id/Relative4"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+        <TextView
+            android:id="@+id/textFps4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FPS Goes Here"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textName4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recognized Name Goes Here"
+            android:textSize="14sp"
+            android:layout_toRightOf="@+id/textFps4" />
+        </RelativeLayout>
+        
+        
+    <RelativeLayout
+        android:id="@+id/Relative5"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+        <TextView
+            android:id="@+id/textFps5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FPS Goes Here"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textName5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recognized Name Goes Here"
+            android:textSize="14sp"
+            android:layout_toRightOf="@+id/textFps5" />
+        </RelativeLayout>
+        
+        
+    <RelativeLayout
+        android:id="@+id/Relative6"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+        <TextView
+            android:id="@+id/textFps6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FPS Goes Here"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textName6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recognized Name Goes Here"
+            android:textSize="14sp"
+            android:layout_toRightOf="@+id/textFps6" />
+        </RelativeLayout>
+        
+        
+    <RelativeLayout
+        android:id="@+id/Relative7"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+        <TextView
+            android:id="@+id/textFps7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FPS Goes Here"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textName7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recognized Name Goes Here"
+            android:textSize="14sp"
+            android:layout_toRightOf="@+id/textFps7" />
+        </RelativeLayout>
+        <!--
     <ListView
         android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </ListView>
--->
+        -->
 
+    </LinearLayout>
 
 </LinearLayout>

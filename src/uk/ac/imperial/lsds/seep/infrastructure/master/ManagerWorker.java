@@ -49,7 +49,7 @@ public class ManagerWorker implements Runnable {
 	private ServerSocket managerS = null;
 	private Socket clientSocket = null;
 
-	private int refPort = 3500;
+	//private int refPort = 3500;
 
 	private boolean goOn;
 

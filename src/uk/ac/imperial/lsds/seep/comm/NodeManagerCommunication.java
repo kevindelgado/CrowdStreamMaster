@@ -39,6 +39,7 @@ import android.os.AsyncTask;
 import uk.ac.imperial.lsds.seep.infrastructure.NodeManager;
 import uk.ac.imperial.lsds.seep.infrastructure.dynamiccodedeployer.ExtendedObjectOutputStream;
 import uk.ac.imperial.lsds.seep.infrastructure.master.Infrastructure;
+import uk.ac.imperial.lsds.seep.infrastructure.master.MasterController;
 import uk.ac.imperial.lsds.seep.infrastructure.master.Node;
 import uk.ac.imperial.lsds.seep.operator.Operator;
 
@@ -165,7 +166,8 @@ public class NodeManagerCommunication {
 		ArrayList<String> parameters = new ArrayList<String>();
 		parameters.add(port+"");
 		parameters.add(bindAddr.getHostAddress());
-		parameters.add(ownPort+"");
+		//parameters.add(ownPort+"");
+		parameters.add(MasterController.inf_pool[MasterController.index]+"");
 
 		new sendBootstrapInformationTask().execute(parameters);
 
@@ -200,9 +202,11 @@ public class NodeManagerCommunication {
 				//				} else
 				ip = ips[0];
 
-				command = "bootstrap"+" "+ip+" "+parameters.get(2)+"\n";
-				LOG.info("--> Boot Info: {} to: {} on: {}", command, parameters.get(1), parameters.get(0));
-				Socket conn = new Socket(InetAddress.getByName(parameters.get(1)), Integer.parseInt(parameters.get(0)));
+				//command = "bootstrap"+" "+ip+" "+parameters.get(2)+"\n";
+				command = "bootstrap"+" "+ip+" "+ MasterController.inf_pool[MasterController.index];
+				//LOG.info("--> Boot Info: {} to: {} on: {}", command, parameters.get(1), parameters.get(0));
+				LOG.info("--> Boot Info: {} to: {} on: {}", command, parameters.get(1), MasterController.inf_pool[MasterController.index]);
+				Socket conn = new Socket(InetAddress.getByName(parameters.get(1)), MasterController.inf_pool[MasterController.index]);
 				(conn.getOutputStream()).write(command.getBytes());
 				conn.close();
 				return 0;	
