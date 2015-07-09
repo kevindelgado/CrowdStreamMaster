@@ -56,6 +56,7 @@ public class MainListActivity extends Activity implements OnSubmitListener{
 	EditText port1;
 	EditText port2;
 	EditText port3;
+	EditText port4;
 	EditText numWorkers;
 
 	public static final int        JAVA_DETECTOR       = 0;
@@ -166,9 +167,9 @@ public class MainListActivity extends Activity implements OnSubmitListener{
 	}
 
 
-	public void valueChanged(String one, String two, String three) {
+	public void valueChanged(String one, String two, String three, String four) {
 
-		String[] ports = {one, two, three};
+		String[] ports = {one, two, three, four};
 		//TextView[] textViews = {textFpsValue, textNameValue};
 		TextView[] textViews = getTextViews(index++);
 		FaceTask currentTask = new FaceTask(ports, textViews);

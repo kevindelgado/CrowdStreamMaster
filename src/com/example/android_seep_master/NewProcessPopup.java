@@ -14,8 +14,8 @@ import android.widget.PopupWindow;
 
 public class NewProcessPopup extends PopupWindow{
 	Context context;  
-	EditText editPort1, editPort2, editPort3;  
-	String port1, port2, port3;  
+	EditText editPort1, editPort2, editPort3, editPort4;  
+	String port1, port2, port3, port4;  
 
 	private int dx;
 	private int dy;
@@ -38,6 +38,7 @@ public class NewProcessPopup extends PopupWindow{
 		editPort1 = (EditText) popupView.findViewById(R.id.port1);  
 		editPort2 = (EditText) popupView.findViewById(R.id.port2);
 		editPort3 = (EditText) popupView.findViewById(R.id.port3);
+		editPort4 = (EditText) popupView.findViewById(R.id.port4);
 
 		btn_submit.setOnClickListener(new OnClickListener() {  
 
@@ -45,8 +46,9 @@ public class NewProcessPopup extends PopupWindow{
 				String port1 = editPort1.getText().toString();  
 				String port2 = editPort2.getText().toString();
 				String port3 = editPort3.getText().toString();
+				String port4 = editPort4.getText().toString();
 
-				mListener.valueChanged(port1, port2, port3);//To change the value of the textview of activity.  
+				mListener.valueChanged(port1, port2, port3, port4);//To change the value of the textview of activity.  
 				dismiss();  
 			}  
 		});
@@ -89,7 +91,7 @@ public class NewProcessPopup extends PopupWindow{
 	}
 
 	public interface OnSubmitListener {
-		void valueChanged(String port1, String port2, String port3);
+		void valueChanged(String port1, String port2, String port3, String port4);
 	}
 
 }

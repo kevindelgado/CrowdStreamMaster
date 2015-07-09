@@ -24,6 +24,12 @@
         android:layout_height="wrap_content"
         android:hint="Port 3 (50000)" />
     
+    <EditText android:id="@+id/port4"
+        android:inputType="number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Port 4 (3500)" />
+    
     <EditText android:id="@+id/num_workers"
         android:inputType="number"
         android:layout_width="match_parent"

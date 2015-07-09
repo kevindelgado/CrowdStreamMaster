@@ -166,8 +166,8 @@ public class NodeManagerCommunication {
 		ArrayList<String> parameters = new ArrayList<String>();
 		parameters.add(port+"");
 		parameters.add(bindAddr.getHostAddress());
-		//parameters.add(ownPort+"");
-		parameters.add(MasterController.inf_pool[MasterController.index]+"");
+		parameters.add(ownPort+"");
+		//parameters.add(MasterController.inf_pool[MasterController.index]+"");
 
 		new sendBootstrapInformationTask().execute(parameters);
 
@@ -202,6 +202,7 @@ public class NodeManagerCommunication {
 				//				} else
 				ip = ips[0];
 
+				/*
 				//command = "bootstrap"+" "+ip+" "+parameters.get(2)+"\n";
 				command = "bootstrap"+" "+ip+" "+ MasterController.inf_pool[MasterController.index];
 				//LOG.info("--> Boot Info: {} to: {} on: {}", command, parameters.get(1), parameters.get(0));
@@ -209,7 +210,14 @@ public class NodeManagerCommunication {
 				Socket conn = new Socket(InetAddress.getByName(parameters.get(1)), MasterController.inf_pool[MasterController.index]);
 				(conn.getOutputStream()).write(command.getBytes());
 				conn.close();
-				return 0;	
+				return 0;
+				*/
+				command = "bootstrap"+" "+ip+" "+parameters.get(2)+"\n";
+				LOG.info("--> Boot Info: {} to: {} on: {}", command, parameters.get(1), parameters.get(0));
+				Socket conn = new Socket(InetAddress.getByName(parameters.get(1)), Integer.parseInt(parameters.get(0)));
+				(conn.getOutputStream()).write(command.getBytes());
+				conn.close();
+				return 0;
 			}
 			catch(UnknownHostException uhe){
 				System.out.println("INF.sendBootstrapInformation: "+uhe.getMessage());

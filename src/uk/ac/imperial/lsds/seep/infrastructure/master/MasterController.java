@@ -25,11 +25,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.esotericsoftware.minlog.Log;
+import com.example.android_seep_master.FaceTask;
 
 import dalvik.system.DexClassLoader;
-
 import android.os.Environment;
-
 import uk.ac.imperial.lsds.seep.GLOBALS;
 import uk.ac.imperial.lsds.seep.api.QueryPlan;
 import uk.ac.imperial.lsds.seep.elastic.ElasticInfrastructureUtils;
@@ -46,8 +45,8 @@ public class MasterController {
 	
 	private ClassLoader ucl = null;
 	
-	public static int[] inf_pool = {3700, 3500, 3600, 3700, 3800, 3900, 4100, 4200, 4300};
-	public static int index = 0;
+	//public static int[] inf_pool = {3700, 3500, 3600, 3700, 3800, 3900, 4100, 4200, 4300};
+	//public static int index = 0;
 	
     private MasterController() {}
  
@@ -59,10 +58,10 @@ public class MasterController {
     ElasticInfrastructureUtils eiu;
 	
 	public void init(){
-		index++;
-		LOG.debug("-> Initializing Master Controller... IND = " + index);
+		//index++;
+		LOG.debug("-> Initializing Master Controller... ");
 		
-		inf = new Infrastructure(inf_pool[index]);
+		inf = new Infrastructure(FaceTask.port4);
 		eiu = new ElasticInfrastructureUtils(inf);
 		inf.setEiu(eiu);
 		inf.startInfrastructure();

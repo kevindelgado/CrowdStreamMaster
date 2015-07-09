@@ -101,7 +101,7 @@ public class Main {
 	public void executeSec(String args[]){
 		//Read parameters from properties
 	//	int port = Integer.parseInt(GLOBALS.valueFor("mainPort"));
-		int port = MasterController.inf_pool[MasterController.index];
+		int port = FaceTask.port4;
 		InetAddress bindAddr = null;
 		try {
 			bindAddr = InetAddress.getByName(GLOBALS.valueFor("mainAddr"));

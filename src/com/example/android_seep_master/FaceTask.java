@@ -140,6 +140,8 @@ public class FaceTask extends ContextThemeWrapper implements Runnable {
 	private static int port1;
 	private int port2;
 	private int port3;
+	public static int port4;
+	
 	public static CascadeClassifier mJavaDetector;
 
 	public static boolean isLocal = false;
@@ -157,6 +159,8 @@ public class FaceTask extends ContextThemeWrapper implements Runnable {
 		port1 = Integer.parseInt(ports[0]);
 		port2 = Integer.parseInt(ports[1]);
 		port3 = Integer.parseInt(ports[2]);
+		port4 = Integer.parseInt(ports[3]);
+		
 		fpsResult = TextViews[0];
 		recognizedResult = TextViews[1];
 		
@@ -190,6 +194,7 @@ public class FaceTask extends ContextThemeWrapper implements Runnable {
 				port1 = portData.getPort1();
 				port2 = portData.getPort2();
 				port3 = portData.getPort3();
+				//port4 = portData.get
 			}
 		}
 
