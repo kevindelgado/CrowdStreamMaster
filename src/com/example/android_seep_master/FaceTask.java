@@ -79,7 +79,7 @@ public class FaceTask extends ContextThemeWrapper implements Runnable {
 	private String currentRecognized = "";
 	
 
-
+/*
 	ArrayList<Messenger> mClients = new ArrayList<Messenger>(); // Keeps track of all current registered clients.
 	int mValue = 0; // Holds last value set by a client.
 	static final int MSG_REGISTER_CLIENT = 1;
@@ -88,7 +88,8 @@ public class FaceTask extends ContextThemeWrapper implements Runnable {
 	static final int MSG_SET_STRING_VALUE = 4;
 	static final int MSG_SET_PORT_NUMS = 5;
 	static final int MSG_SET_FACE_RESULT = 6;
-	final Messenger mMessenger = new Messenger(new IncomingHandler()); // Target we publish for clients to send messages to IncomingHandler.
+	*/
+	//final Messenger mMessenger = new Messenger(new IncomingHandler()); // Target we publish for clients to send messages to IncomingHandler.
 
 
 
@@ -155,7 +156,8 @@ public class FaceTask extends ContextThemeWrapper implements Runnable {
 	//private int numOps;
 	public static PersonRecognizer fr = MainListActivity.fr;
 
-	public FaceTask(String[] ports, TextView[] TextViews) {
+	public FaceTask(String[] ports, String numWorkers, TextView[] TextViews) {
+		numOps = Integer.parseInt(numWorkers);
 		port1 = Integer.parseInt(ports[0]);
 		port2 = Integer.parseInt(ports[1]);
 		port3 = Integer.parseInt(ports[2]);
@@ -178,7 +180,7 @@ public class FaceTask extends ContextThemeWrapper implements Runnable {
 		return mMessenger.getBinder();
 	}
 	 */
-
+/*
 	class IncomingHandler extends Handler {
 		@Override
 		public void handleMessage(Message msg) {
@@ -221,7 +223,7 @@ public class FaceTask extends ContextThemeWrapper implements Runnable {
 		}
 
 	}
-
+*/
 	public void run() {
 		startTask();
 	}

@@ -34,6 +34,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.example.android_seep_master.FaceTask;
 
@@ -175,6 +176,7 @@ public class Sink implements StatelessOperator {
 			try {              
 				fos.write(data);
 				fos.flush();
+				//Log.i("Sink", "WRITE TO FPS");
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -191,6 +193,7 @@ public class Sink implements StatelessOperator {
 			try {              
 				fos2.write(data);
 				fos2.flush();
+				//Log.i("Sink", "WRITE TO DELAY");
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {

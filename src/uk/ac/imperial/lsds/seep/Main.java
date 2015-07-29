@@ -105,6 +105,7 @@ public class Main {
 		InetAddress bindAddr = null;
 		try {
 			bindAddr = InetAddress.getByName(GLOBALS.valueFor("mainAddr"));
+			//bindAddr = InetAddress.getByName(FaceTask.ipAddr);
 		} 
 		catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -114,7 +115,8 @@ public class Main {
 			ownPort = new Integer(args[1]);
 		}
 		else{
-			ownPort = Integer.parseInt(GLOBALS.valueFor("ownPort"));
+			//ownPort = Integer.parseInt(GLOBALS.valueFor("ownPort"));
+			ownPort = FaceTask.port4;
 		}
 		
 		

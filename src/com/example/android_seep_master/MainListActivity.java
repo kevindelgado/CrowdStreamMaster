@@ -33,6 +33,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -48,7 +49,7 @@ public class MainListActivity extends Activity implements OnSubmitListener{
 	TextView textFpsValue;
 	TextView textNameValue;
 	Messenger mService = null;
-	final Messenger mMessenger = new Messenger(new IncomingHandler());
+	//final Messenger mMessenger = new Messenger(new IncomingHandler());
 
 	NewProcessPopup popup;
 	Context context;
@@ -71,7 +72,7 @@ public class MainListActivity extends Activity implements OnSubmitListener{
 	public static WifiManager mainWifi;
 
 	ExecutorService executor;
-
+/*
 	class IncomingHandler extends Handler {
 		@Override
 		public void handleMessage(Message msg) {
@@ -86,7 +87,8 @@ public class MainListActivity extends Activity implements OnSubmitListener{
 			}
 		}
 	}
-
+*/
+	/*
 	private ServiceConnection mConnection = new ServiceConnection() {
 		public void onServiceConnected(ComponentName className, IBinder service) {
 			mService = new Messenger(service);
@@ -107,7 +109,7 @@ public class MainListActivity extends Activity implements OnSubmitListener{
 			//textStatus.setText("Disconnected.");
 		}
 	};
-
+*/
 
 
 
@@ -115,6 +117,7 @@ public class MainListActivity extends Activity implements OnSubmitListener{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_list);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		configureGuiandAddListeners();
 		executor = Executors.newCachedThreadPool();
 
@@ -135,7 +138,7 @@ public class MainListActivity extends Activity implements OnSubmitListener{
 		IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
 		registerReceiver(batteryReceiver, filter);
 
-
+		
 
 
 	}
@@ -145,6 +148,7 @@ public class MainListActivity extends Activity implements OnSubmitListener{
 		super.onDestroy();
 		try {
 			//doUnbindService();
+			stopService(new Intent(MainListActivity.this, CpuMonitorService.class));
 		}
 		catch (Throwable t) {
 			Log.e("MainListActivity", "Failed to unbind from the service", t);
@@ -167,12 +171,16 @@ public class MainListActivity extends Activity implements OnSubmitListener{
 	}
 
 
-	public void valueChanged(String one, String two, String three, String four) {
+	public void valueChanged(String one, String two, String three, String four, String workers) {
 
 		String[] ports = {one, two, three, four};
 		//TextView[] textViews = {textFpsValue, textNameValue};
 		TextView[] textViews = getTextViews(index++);
-		FaceTask currentTask = new FaceTask(ports, textViews);
+		FaceTask currentTask = new FaceTask(ports, workers, textViews);
+		Intent intent = new Intent(MainListActivity.this, CpuMonitorService.class);
+		//intent.putExtra("IP", et.getText().toString());
+		Log.i(TAG, "START SERVICE");
+		startService(intent);
 		executor.execute(currentTask);
 		popup.dismiss();
 	}
